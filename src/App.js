@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+// frontend/src/App.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Leaderboard from './components/leaderboard';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [leaderboardData, setLeaderboardData] = useState([]);
+
+    useEffect(() => {
+        const fetchLeaderboardData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/leaderboard');
+                setLeaderboardData(response.data);
+            } catch (error) {
+                console.error('Error fetching leaderboard data:', error);
+            }
+        };
+
+        fetchLeaderboardData();
+    }, []);
+
+    return (
+        <div className="app-container">
+            <div className="leaderboard-wrapper">
+                <Leaderboard data={leaderboardData} />
+            </div>
+        </div>
+    );
+};
 
 export default App;
